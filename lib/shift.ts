@@ -1,7 +1,7 @@
 import { TimeClockType } from "./freee/types/time-clock"
 import prisma from "./prisma"
 import groupBy from "./util/group-by"
-import mapMap from "./util/map-map"
+import { mapMapValues } from "./util/map-map"
 
 export interface Shift {
   startAt: Date
@@ -62,10 +62,22 @@ const timeClockGenerator = function* (shifts: Shift[]): Generator<TimeClock> {
   }
 }
 
-export const getShiftMap = async (employeeId?: number) => {
+export const getShiftMap = async (params?: {
+  employeeIds?: number | number[]
+  fromDate?: Date
+  toDate?: Date
+  limit?: number
+  offset?: number
+}) => {
   const rows = await prisma.shift.findMany({
     where: {
-      employeeId,
+      employeeId: Array.isArray(params?.employeeIds) ? {
+        in: params?.employeeIds
+      } : params?.employeeIds,
+      startAt: {
+        gt: params?.fromDate,
+        lt: params?.toDate,
+      }
     },
     select: {
       employeeId: true,
@@ -74,15 +86,23 @@ export const getShiftMap = async (employeeId?: number) => {
     },
     orderBy: {
       startAt: 'asc',
-    }
+    },
+    take: params?.limit,
+    skip: params?.offset,
   })
 
   return groupBy(rows, s => s.employeeId)
 }
 
-export const getTimeClockMap = async (employeeId?: number) => {
-  const shiftMap = await getShiftMap(employeeId)
-  return mapMap(shiftMap, timeClockGenerator)
+export const getTimeClockMap = async (params?: {
+  employeeIds?: number | number[]
+  fromDate?: Date
+  toDate?: Date
+  limit?: number
+  offset?: number
+}) => {
+  const shiftMap = await getShiftMap(params)
+  return mapMapValues(shiftMap, timeClockGenerator)
 }
 
 export const postShift = async (employeeId: number, shift: Shift) => {

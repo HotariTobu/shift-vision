@@ -5,18 +5,27 @@ export default <T>(iterator: T[] | IterableIterator<T>, func: (a: T, b: T) => nu
     iterator = iterator.values()
   }
 
-  let { value: minValue }: NextResult<T> = iterator.next()
+  let { value: minValue, done }: NextResult<T> = iterator.next()
+  if (done) {
+    return null
+  }
 
-  while (true) {
+  let minIndex = 0
+
+  for (let index = 1; true; index++) {
     const { value, done } = iterator.next()
     if (done) {
       break
     }
 
     if (func(minValue, value) > 0) {
+      minIndex = index
       minValue = value
     }
   }
 
-  return minValue
+  return {
+    index: minIndex,
+    value: minValue,
+  }
 }

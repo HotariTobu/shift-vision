@@ -1,74 +1,49 @@
-import { Accordion, AccordionBody, AccordionHeader, AccordionList, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react"
-import { getTimeClockErrorsByDate } from "./logic"
-import { TimeClock } from "@/lib/shift"
-import timeClockTypeLabelMap from "../label-map"
+import { Flex, Text, Title } from "@tremor/react"
+import isInvalidDate from "@/lib/util/is-invalid-date"
+import Link from "next/link"
+import ErrorList from "./error-list"
+import { Suspense } from "react"
 
-const formatDate = (dateTime: Date) => dateTime.toLocaleDateString('ja-JP', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  weekday: 'short',
-})
-
-const formatTimeClock = (timeClock: TimeClock | null) => ({
-  type: timeClockTypeLabelMap.get(timeClock?.type ?? ''),
-  time: timeClock?.dateTime?.toLocaleTimeString('ja-JP', {
-    hour: '2-digit',
-    minute: '2-digit',
-  }),
-})
-
-const TimeClockCell = (props: {
-  type?: string
-  time?: string
-}) => {
-  return (
-    <TableCell>
-      <Text>{props.type}</Text>
-      <Text>{props.time}</Text>
-    </TableCell>
-  )
-}
-
-export default async (props: {
+export default (props: {
   searchParams: {
-    y?: number
-    m?: number
+    y?: string
+    m?: string
   }
 }) => {
-  const errorsByDate = Array.from(await getTimeClockErrorsByDate())
-  errorsByDate.reverse()
+  const { y, m } = props.searchParams
+
+  let thisMonth = new Date(
+    Number.parseInt(y ?? ''),
+    Number.parseInt(m ?? '') - 1,
+  )
+
+  if (isInvalidDate(thisMonth)) {
+    thisMonth = new Date()
+  }
+
+  const year = thisMonth.getFullYear()
+  const month = thisMonth.getMonth() + 1
 
   return (
     <main className="p-12">
-      <Title>Dashboard</Title>
-      <Text>Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</Text>
+      <Title>打刻のズレ一覧</Title>
+      <Text>シフトと実際の打刻のズレが日付ごとに表示されます。</Text>
 
-      <AccordionList>
-        {errorsByDate.map(([date, errors]) => (
-          <Accordion defaultOpen={true}>
-            <AccordionHeader>{formatDate(date)}</AccordionHeader>
-            <AccordionBody>
-              <Table>
-                <TableHead>
-                  <TableHeaderCell>名前</TableHeaderCell>
-                  <TableHeaderCell>予定</TableHeaderCell>
-                  <TableHeaderCell>実際</TableHeaderCell>
-                </TableHead>
-                <TableBody>
-                  {errors.map(({ employee, error }) => (
-                    <TableRow>
-                      <TableCell>{employee.display_name}</TableCell>
-                      <TimeClockCell {...formatTimeClock(error.plan)}></TimeClockCell>
-                      <TimeClockCell {...formatTimeClock(error.fact)}></TimeClockCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </AccordionBody>
-          </Accordion>
-        ))}
-      </AccordionList>
+      <Flex className="mt-4">
+        {/*
+        Linkではstreamingできないバグがあるらしい
+        https://github.com/vercel/next.js/issues/49125
+        */}
+        <a href={`error?y=${year}&m=${month - 1}`}>先月</a>
+        {/* <Link href={`error?y=${year}&m=${month - 1}`}>先月</Link> */}
+        <Text>{year}年{month}月</Text>
+        <a href={`error?y=${year}&m=${month + 1}`}>来月</a>
+        {/* <Link href={`error?y=${year}&m=${month + 1}`}>来月</Link> */}
+      </Flex>
+
+      <Suspense fallback={<p>Loading...</p>}>
+        <ErrorList year={year} month={month} />
+      </Suspense>
     </main>
   )
 }

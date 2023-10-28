@@ -7,7 +7,7 @@ export const POST = async (request: Request, context: {
     employeeId: string
   }
 }) => {
-  const employeeId = Number(context.params.employeeId)
+  const employeeId = Number.parseInt(context.params.employeeId)
 
   if (Number.isNaN(employeeId)) {
     return new Response(null, {

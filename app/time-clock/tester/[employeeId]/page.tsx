@@ -9,7 +9,7 @@ export default async (props: {
     employeeId: string
   }
 }) => {
-  const employeeId = Number(props.params.employeeId)
+  const employeeId = Number.parseInt(props.params.employeeId)
 
   if (Number.isNaN(employeeId)) {
     throw new Error('URL param employeeId must be an integer')
@@ -24,7 +24,9 @@ export default async (props: {
     }
   })
 
-  const planMap = await getTimeClockMap(employeeId)
+  const planMap = await getTimeClockMap({
+    employeeIds: employeeId
+  })
   const plans = Array.from(planMap.get(employeeId) ?? [])
 
   return (
