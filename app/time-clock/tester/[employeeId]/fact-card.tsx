@@ -10,10 +10,10 @@ import { useState } from "react"
 import timeClockTypeLabelMap from "../../label-map"
 import DateTimePicker from "./date-time-picker"
 
-export default (props: {
+export default function FactCard(props: {
   employeeId: number
   defaultTimeClocks: TimeClock[]
-}) => {
+}) {
   const [timeClocks, updateTimeClocks] = useImmer(props.defaultTimeClocks)
 
   const [timeClockDateTime, setTimeClockDateTime] = useState<Date>()

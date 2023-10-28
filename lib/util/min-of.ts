@@ -1,6 +1,6 @@
 import NextResult from "./next-result"
 
-export default <T>(iterator: T[] | IterableIterator<T>, func: (a: T, b: T) => number) => {
+export const minOf = <T>(iterator: T[] | IterableIterator<T>, func: (a: T, b: T) => number) => {
   if (Array.isArray(iterator)) {
     iterator = iterator.values()
   }

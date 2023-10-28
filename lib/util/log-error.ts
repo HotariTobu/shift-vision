@@ -1,4 +1,4 @@
-export default <T>(error: T) => {
+const logError = <T>(error: T) => {
   if (error instanceof Error) {
     console.error(error)
   }
@@ -8,3 +8,5 @@ export default <T>(error: T) => {
     console.error(message)
   }
 }
+
+export default logError

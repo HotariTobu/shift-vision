@@ -4,12 +4,12 @@ import Link from "next/link"
 import ErrorList from "./error-list"
 import { Suspense } from "react"
 
-export default (props: {
+export default function Page(props: {
   searchParams: {
     y?: string
     m?: string
   }
-}) => {
+}) {
   const { y, m } = props.searchParams
 
   let thisMonth = new Date(

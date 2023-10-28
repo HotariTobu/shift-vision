@@ -3,7 +3,7 @@ import Employee from "@/lib/freee/types/employee"
 import { TimeClock, getTimeClockMap } from "@/lib/shift"
 import { groupByAsync } from "@/lib/util/group-by"
 import { mapMapKeys } from "@/lib/util/map-map"
-import minOf from "@/lib/util/min-of"
+import { minOf } from "@/lib/util/min-of"
 import NextResult from "@/lib/util/next-result"
 
 const TIME_CLOCK_THRESHOLD = 2 * 60 * 60 * 1000

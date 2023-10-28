@@ -2,10 +2,10 @@ import { DatePicker, Flex, NumberInput } from "@tremor/react"
 import { useState } from "react"
 import { ja } from 'date-fns/locale'
 
-export default (props: {
+export default function DateTimePicker(props: {
   defaultDateTime?: Date
   onChanged?: (dateTime?: Date) => void
-}) => {
+}) {
   const [date, setDate] = useState(props.defaultDateTime)
   const [hour, setHour] = useState(props.defaultDateTime?.getFullYear())
   const [minute, setMinute] = useState(props.defaultDateTime?.getMonth())

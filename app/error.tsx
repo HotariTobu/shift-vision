@@ -3,10 +3,10 @@
 import logError from '@/lib/util/log-error'
 import { useEffect } from 'react'
 
-export default (props: {
+export default function Error(props: {
   error: Error & { digest?: string }
   reset: () => void
-}) => {
+}) {
   useEffect(() => {
     // Log the error to an error reporting service
     logError(props.error)

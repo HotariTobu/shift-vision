@@ -20,10 +20,10 @@ const formatTimeClock = (timeClock: TimeClock | null) => ({
   }),
 })
 
-export default (props: {
+export default function ErrorList(props: {
   year: number
   month: number
-}) => {
+}) {
   const errorsByDate = Array.from(use(getTimeClockErrorsByDate({
     year: props.year,
     month: props.month,

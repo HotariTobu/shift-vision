@@ -1,6 +1,6 @@
 import { TimeClockType } from "./freee/types/time-clock"
 import prisma from "./prisma"
-import groupBy from "./util/group-by"
+import { groupBy } from "./util/group-by"
 import { mapMapValues } from "./util/map-map"
 
 export interface Shift {

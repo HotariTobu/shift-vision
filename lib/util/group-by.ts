@@ -1,4 +1,4 @@
-export default <V, K>(values: Iterable<V>, func: (v: V) => K) => {
+export const groupBy = <V, K>(values: Iterable<V>, func: (v: V) => K) => {
   const map = new Map<K, V[]>()
 
   for (const value of values) {

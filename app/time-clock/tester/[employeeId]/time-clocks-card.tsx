@@ -3,11 +3,11 @@ import { Card, Table, TableHead, TableRow, TableHeaderCell, TableBody, TableCell
 import { ReactNode } from "react"
 import timeClockTypeLabelMap from "../../label-map"
 
-export default (props: {
+export default function TimeClocksCard(props: {
   children: ReactNode
   title: string
   timeClocks: TimeClock[]
-}) => {
+}) {
   return (
     <Card className="mt-4">
       <Text>{props.title}</Text>

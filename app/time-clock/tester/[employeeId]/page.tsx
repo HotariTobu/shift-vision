@@ -4,11 +4,11 @@ import { Title } from "@tremor/react"
 import FactCard from "./fact-card"
 import PlanCard from "./plan-card"
 
-export default async (props: {
+export default async function Page(props: {
   params: {
     employeeId: string
   }
-}) => {
+}) {
   const employeeId = Number.parseInt(props.params.employeeId)
 
   if (Number.isNaN(employeeId)) {

@@ -8,10 +8,10 @@ import { Flex, Button } from "@tremor/react"
 import { useState } from "react"
 import DateTimePicker from "./date-time-picker"
 
-export default (props: {
+export default function PlanCard(props: {
   employeeId: number
   defaultTimeClocks: TimeClock[]
-}) => {
+}) {
   const [timeClocks, updateTimeClocks] = useImmer(props.defaultTimeClocks)
 
   const [shiftStartAt, setShiftStartAt] = useState<Date>()

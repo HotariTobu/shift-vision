@@ -2,7 +2,7 @@ import { getEmployees } from "@/lib/freee/hr"
 import { List, ListItem } from "@tremor/react"
 import Link from "next/link"
 
-export default async () => {
+export default async function Page() {
   const employees = await getEmployees()
 
   return (
